@@ -13,22 +13,60 @@ Add to your Gemfile and `bundle install` :
 gem 'cuttings'
 ```
 
+Then create the directory structure with the install generator :
+
+```bash
+rails generate cuttings:install
+```
+
 ## Usage
 
-In your `db/seeds.rb` or in a `rake` task :
+Your can use **Cuttings** in your `db/seeds.rb` file, or inside `rake` tasks,
+depending on which method you prefer.
+
+If you choose the `db/seeds.rb` file way, just use the API as explained in the
+**DSL** section.
+
+If you choose the `rake` task way, a generator is provided to help you organize
+your seed tasks.
+
+### Using the `cuttings` generator :
+
+But a generator is provided to help you create separated seed data accessible
+with `rake` tasks.
+
+```bash
+rails generate cuttings users
+```
+
+Which will generate the following file in `lib/seeds/tasks/users.rake`
 
 ```ruby
-require 'cuttings'
+namespace :seed do
+  task users: :environment do
+    Cuttings.plant do
+      # Add your seeding code here
+    end
+  end
+end
+```
 
-Cuttings.plant do
-  truncate %w(Visit)
+### Example usage
 
-  seed 'User' do
-    create(
-      name: 'Jean Jean',
-      email: 'jean@jean.com',
-      avatar: attachment('user.png')
-    )
+```ruby
+namespace :seed do
+  task users: :environment do
+    Cuttings.plant do
+      truncate %w(Visit)
+
+      seed 'User' do
+        create(
+          name: 'Jean Jean',
+          email: 'jean@jean.com',
+          avatar: attachment('user.png')
+        )
+      end
+    end
   end
 end
 ```

@@ -10,3 +10,5 @@ module Cuttings
     greenhouse.process
   end
 end
+
+require 'cuttings/railtie' if defined?(Rails)
